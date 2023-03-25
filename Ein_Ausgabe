@@ -1,0 +1,68 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
+/**
+ *
+ * @author tjorven
+ */
+import javax.swing.JOptionPane;
+
+public class Ein_Ausgabe {
+   
+    
+    public static void main(String[] args) {
+    int leter_count =0;
+    int moeglichkeiten =33;
+    String bytcode;
+    String text = JOptionPane.showInputDialog("Enter your text");
+    int[][] myNumbers = new int [moeglichkeiten][text.length()];
+    text.toLowerCase();
+    for(int i =0; i<moeglichkeiten; i++){  
+            myNumbers[0][i]=0;
+            myNumbers[1][i]=0;
+    }
+    for (int j =0; j <text.length();j++){
+       char helper =  text.charAt(j);
+       int ascii = (int) helper ;
+       for(int i=0; i < moeglichkeiten ;i++){
+           if (myNumbers[0][i]==0){
+               myNumbers[0][i]= ascii;
+               myNumbers[1][i]= 1;
+               leter_count ++;
+               break;
+           }
+           else if (myNumbers[0][i] == ascii){
+               myNumbers[1][i]= myNumbers[1][i] + 1;
+               break;
+           }
+       }
+    }
+    
+    
+    /* sortieren nach 2 und löschen der 0 0 
+    *ist das notwendig ?
+    * überprüfen ob die 2 kleinseten < kleinste 3 
+    * PDF lesen 
+    * ersetzen der menge der Buchstaben mit 0101 aus dem baum = Tabele zum entziffern ?
+    * for ... text.charat(i) ... for Array [0][j]... bytcode = bytcode +"Array[1j]"
+    */
+    
+    for(int i =0 ; i < moeglichkeiten; i++){
+           
+        System.out.println((char)myNumbers[0][i]);
+        System.out.println(myNumbers[1][i]);
+       }
+        
+        
+       
+    
+    
+    
+    
+    
+    JOptionPane.showMessageDialog(null, text);
+    
+    }
+}
