@@ -66,3 +66,10 @@ public class Ein_Ausgabe {
     
     }
 }
+/*Stand 25.03.2023 
+die Anzahl jedes char im Text wird gezählt .
+next steps
+Anwendung Hoffmann Protokoll
+einsezen in Baum 
+gibt Codierung wieder, mit codiertem Text
+*/
