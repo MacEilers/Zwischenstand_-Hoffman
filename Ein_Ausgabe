@@ -1,0 +1,169 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
+/**
+ *
+ * @author tjorven
+ */
+import javax.swing.JOptionPane;
+
+public class Ein_Ausgabe {
+   
+    public static void main(String[] args) {
+    
+    
+    int leter_count =0;
+    int moeglichkeiten =33;
+    String bytcode;
+    String text = JOptionPane.showInputDialog("Enter your text");
+    int[][] myNumbers = new int [moeglichkeiten][text.length()];
+    text.toLowerCase();
+    for(int i =0; i<moeglichkeiten; i++){  
+            myNumbers[0][i]=0;
+            myNumbers[1][i]=0;
+    }
+    for (int j =0; j <text.length();j++){
+       char helper =  text.charAt(j);
+       int ascii = (int) helper ;
+       for(int i=0; i < moeglichkeiten ;i++){
+           if (myNumbers[0][i]==0){
+               myNumbers[0][i]= ascii;
+               myNumbers[1][i]= 1;
+               leter_count ++;
+               break;
+           }
+           else if (myNumbers[0][i] == ascii){
+               myNumbers[1][i]= myNumbers[1][i] + 1;
+               break;
+           }
+       }
+    }
+    quicksort(myNumbers,0,myNumbers.length);
+    
+    
+    Q<Buchstabe> q = new Q<Buchstabe>();
+    
+    
+    for (int i = 0; i < myNumbers.length; i++) {
+        char Buchstabe = (char) myNumbers[0][i];
+        String Buchstabe_S = Buchstabe+"";
+            q.enqueue  ( new Buchstabe(myNumbers[0][i], Buchstabe_S,myNumbers[1][i]));
+    }
+    Protukol(q);
+    
+   
+    
+    
+    
+    for(int i =0 ; i <myNumbers.length ; i++){
+           
+        System.out.println((char)myNumbers[0][i]);
+        System.out.println(myNumbers[1][i]);
+       }
+    
+    
+        
+        
+       
+    
+    
+    
+    
+    
+    //JOptionPane.showMessageDialog(null,text);Bytcode sowie Buchstabe = 01001
+    
+    }
+    static Buchstabe Protukol (Q q){
+        Buchstabe eins =finde_kleine(q);
+        Buchstabe zwei =finde_kleine(q);
+        int number;
+        String name;
+        name = eins.Buchstabe_String + zwei.Buchstabe_String;
+        number = eins.Anzahl + zwei.Anzahl;
+        
+        Buchstabe zusammengefast = new Buchstabe(0,name,number);
+        
+        //zusammengefast.isLeft;
+        //zusammengefast.isRight;
+        
+        q.enqueue(zusammengefast);
+        
+        
+        
+        
+    Buchstabe helper;
+    helper = (Buchstabe) q.front();
+    q.dequeue();   
+    if(q.isEmpty())  {
+        return helper;
+    }
+    else{
+        q.enqueue(helper);
+          Protukol(q);// Wiederholt solange es mindestends zwei element in der q gibt 
+        return null;
+        
+        // ist das notwendig ??
+        
+       
+    }
+    }
+    static void quicksort(int[][] array, int low, int up) {
+    if (low >= up) {
+      return;
+    }
+    int pivot = array[1][up];
+    int links = low ;
+    int rechts = up;
+     while (links < rechts) {  // bis sie sich treffen 
+      while (array[1][links] <= pivot && links < rechts) {
+        links++;// Geht einen Schrit nach Rechts 
+      }
+      while (array[1][rechts] >= pivot && links < rechts) {
+        rechts--;// Geht einen schrit nach nach Links
+      }
+      swap(array, links, rechts);// Wenn ein kleineres rechts und ein größeres links sind werden sie Getauscht 
+     }
+    swap(array, links,up );
+    quicksort(array, low, links - 1); // Neu sortieren kleiner Pivot
+    quicksort(array, links + 1,up );// Neu sortieren größer Pivot 
+  }
+    
+    static void swap(int[][] array, int pos1, int pos2) { // Tauschen zweier Elemente einer Arrays 
+        int helper = array[1][pos1];
+        array[1][pos1] = array[1][pos2];
+        array[1][pos2] = helper;
+        helper = array[0][pos1];
+        array[0][pos1] = array[0][pos2];
+        array[0][pos2] = helper;
+    }
+    static Buchstabe finde_kleine(Q q){// Enfehrnt das kleinste element aus der q und returnt es
+        Q<Buchstabe> zwei = new Q<Buchstabe>();
+        
+        Buchstabe klienstes = (Buchstabe) q.front();
+        q.dequeue();
+        Buchstabe vergleich;
+        
+        while (!q.isEmpty()){
+            vergleich = (Buchstabe)q.front();
+            q.dequeue();
+            
+            if ( klienstes.Anzahl < vergleich.Anzahl){
+                zwei.enqueue(vergleich);
+            }
+            else {
+                zwei.enqueue(klienstes);
+                klienstes = vergleich;
+            }
+        }
+         while (!zwei.isEmpty()){
+         q.enqueue(zwei.front());
+         zwei.dequeue();
+         }
+        
+        
+        return klienstes;
+    }
+    
+}
