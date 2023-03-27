@@ -52,6 +52,7 @@ public class Ein_Ausgabe {
             q.enqueue  ( new Buchstabe(myNumbers[0][i], Buchstabe_S,myNumbers[1][i]));
     }
     Protukol(q);
+    // hier liegt glaube ich der Fehler... Kann null sein liegt an dem Return satment aus der Methode 
     
    
     
