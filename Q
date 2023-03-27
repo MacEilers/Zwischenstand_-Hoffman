@@ -1,0 +1,85 @@
+public class Q<Buchstabe> {
+
+   private  Knode head = null;
+
+    public Knode getHead() {
+        return head;
+    }
+
+    public void setHead(Knode head) {
+        this.head = head;
+    }
+
+    public Knode getTail() {
+        return tail;
+    }
+
+    public void setTail(Knode tail) {
+        this.tail = tail;
+    }
+    private Knode tail = null;
+
+    class Knode {
+
+        private Knode nextNode = null;
+        private Buchstabe content = null;
+
+        public Knode() {
+        }
+
+        public Knode(Buchstabe content) {
+            this.content = content;
+        }
+
+        public Buchstabe getContent() {
+            return content;
+        }
+
+        public void setContent(Buchstabe content) {
+            this.content = content;
+        }
+
+        public Knode getNextNode() {
+            return nextNode;
+        }
+
+        public void setNextNode(Knode nextNode) {
+            this.nextNode = nextNode;
+        }
+
+    }
+
+    public void enqueue(Buchstabe content) {
+        if (isEmpty()) {
+            Knode helper = new Knode(content);
+            this.setHead(helper);
+            this.setTail(helper);
+        } else {
+            Knode helper = new Knode(content);
+            this.tail.setNextNode(helper);
+            this.setTail(helper);
+        }
+    }
+
+    public void dequeue() {
+        if (head != tail) {
+            this.setHead(this.getHead().getNextNode());
+        } else {
+            this.setHead(null);
+            this.setTail(null);
+        }
+    }
+
+    public Buchstabe front() {
+        if (isEmpty()) {
+            return null;
+        } else {
+            return head.getContent();
+        }
+
+    }
+
+    boolean isEmpty() {
+        return this.head == null;
+    }
+}
