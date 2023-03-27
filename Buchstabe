@@ -1,0 +1,20 @@
+public class Buchstabe {
+    int Buchstabe_Ascii;
+    String Buchstabe_String;
+    int Anzahl;
+    Buchstabe Links;
+    Buchstabe Rechts;
+    
+    // ggf. kann man aus der Q oder DyArray entnehem wie man auf folgeobjekt verweist  
+    Buchstabe(int Buchstabe_A,String Buchstabe_S, int Anzahl){
+        Buchstabe_Ascii = Buchstabe_A;
+        Buchstabe_String = Buchstabe_S;
+        this.Anzahl =Anzahl;
+        
+        
+    }
+    
+    
+    
+    
+}
