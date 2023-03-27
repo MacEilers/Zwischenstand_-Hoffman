@@ -9,7 +9,7 @@
  */
 import javax.swing.JOptionPane;
 
-public class Ein_Ausgabe {
+public class Ein_Ausgabe_Alt {
    
     public static void main(String[] args) {
     
