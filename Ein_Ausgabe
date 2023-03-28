@@ -1,45 +1,24 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
+/**
+ *
+ * @author tjorven
+ */
 import javax.swing.JOptionPane;
 
 public class Ein_Ausgabe {
    
     public static void main(String[] args) {
     
-    int leter_count =0;
-    
-    
-    
-    
     String text = JOptionPane.showInputDialog("Enter your text");
     int[][] myNumbers = new int [text.length()][text.length()];
     text = text.toLowerCase();
+    System.out.println(text);
     
-    
-    
-    
-    for(int i =0; i<text.length(); i++){  // Fült mit 0
-            myNumbers[0][i]=0;
-            myNumbers[1][i]=0;
-    }
-    
-    
-    for (int j =0; j <text.length();j++){//  Für jeden Buchstaben im Text
-       char helper =  text.charAt(j);
-       int ascii = (int) helper ; // Ascii wert 
-       for(int i=0; i < text.length() ;i++){ // Wird geschaut ob 
-           if (myNumbers[0][i]== 0){ // die nächste zelle frei ist 
-               myNumbers[0][i]= ascii;
-               myNumbers[1][i]= 1;
-               leter_count ++;
-               break;
-           }
-           else if (myNumbers[0][i] == ascii){// oder ob es den selben buchstaben schon gibt
-               myNumbers[1][i]= myNumbers[1][i] + 1;// erhöt die anzahl des Buchstaben
-               break;
-           }// Geht zur nächsten Zelle
-       }
-    }
-    
-    
+    text_letter_num_cout(text, myNumbers);// Statistik array[0=buchstabe ; 1= anzahl,][für alle vorkomenden Buchstaben]
     
     Q<Buchstabe> q = new Q<Buchstabe>(); 
     
@@ -51,45 +30,39 @@ public class Ein_Ausgabe {
             //                          Ascci               Char        Anzahl
     isLehr++;
     }
+    
     Q<Buchstabe> h = new Q<Buchstabe>(); 
     
-    Buchstabe Wurzel = Protukol(q);// Baut den" Baum"
-                                    // erstellt neuen Buchtsaben aus den Zwei kleinsten Buchstaben
-                                     // Anzahl 1+2 ; zeiger auf die vorgenger
-                                     // Wiederholt bis es nur einen Buchstaben gibt
+    Buchstabe Wurzel = Protukol(q);
     
-    String[][] Tabelle = new String [2][isLehr+1];
-    
+    String[][] Tabelle = new String [isLehr+1][isLehr+1];
+      
     Q<Buchstabe> list = new Q<Buchstabe>();
     
-    auslesen(Wurzel,  list);// Es wird geschaut ob es ein Knoten oder Blat ist
-                            // Wenn knoten dann fügen Bin Links 0 und Rechts 1 hinzu
-                            // Wenn blat return Buchstabe hat volständige Bin folge 
-                            // Buchstabe wird Bin Folge in Q getan 
+    auslesen(Wurzel,  list);
+    
+    
     
     int element =0;//
     Buchstabe akt;
-    
     while(!list.isEmpty()){//Wird in Array übertragen
-        
-        
         akt = list.front();
         list.dequeue();
         
-              Tabelle[0][element] = akt.Buchstabe_String ; 
-              Tabelle[1][element] = akt.getBin() ; 
+        Tabelle[0][element] = akt.Buchstabe_String ;
+        Tabelle[1][element] = akt.getBin() ;
+        
         element++;      
 
        }
     
     
     
+    // Buchstabe in Binercode
+    String text_to_bin = text_to_bin(text, Tabelle );
+    System.out.println(text_to_bin);
+    //String bin_to_text = bin_to_text(text_to_bin,Tabelle);
     
-    for(int i =0 ; i <Tabelle.length ; i++){// Gibt wieder Buchstaben und entsprächendem Weg im BinBaum
-           
-        System.out.println(Tabelle[0][i]);
-        System.out.println(Tabelle[1][i]);
-       }
     
     
         
@@ -102,6 +75,30 @@ public class Ein_Ausgabe {
     
     //JOptionPane.showMessageDialog(null,text);Bytcode sowie Buchstabe = 01001
     
+    }
+    static void text_letter_num_cout(String text,int myNumbers[][]){
+            for(int i =0; i<text.length(); i++){  // Fült mit 0
+            myNumbers[0][i]=0;
+            myNumbers[1][i]=0;
+    }
+    
+    
+    for (int j =0; j <text.length();j++){//  Für jeden Buchstaben im Text
+       char helper =  text.charAt(j);
+       int ascii = (int) helper ; // Ascii wert 
+       for(int i=0; i < text.length() ;i++){ // Wird geschaut ob 
+           if (myNumbers[0][i]== 0){ // die nächste zelle frei ist 
+               myNumbers[0][i]= ascii;
+               myNumbers[1][i]= 1;
+               
+               break;
+           }
+           else if (myNumbers[0][i] == ascii){// oder ob es den selben buchstaben schon gibt
+               myNumbers[1][i]= myNumbers[1][i] + 1;// erhöt die anzahl des Buchstaben
+               break;
+           }// Geht zur nächsten Zelle
+       }
+    }
     }
     static Buchstabe Protukol (Q q){
         Buchstabe eins = finde_kleine(q);
@@ -189,15 +186,46 @@ public class Ein_Ausgabe {
     }
         else{
         //System.out.println("Blat");
-        System.out.println(w.Buchstabe_String+" "+w.getBin());
+        //--System.out.println(w.Buchstabe_String+" "+w.getBin());
         list.enqueue(w);
-        return;
+        return ;
 
 
     }
-    }   
+    }
+    static String text_to_bin(String text,  String Tabelle [][]){
+        String text_bin="";
+         for (int i = 0; i < text.length(); i++) {
+        char help = text.charAt(i);
+        String zu_codireren =help+"";
+        
+        for (int j = 0; j < Tabelle.length; j++) {
+            String position = Tabelle[0][j];
+            
+        if(zu_codireren.equals(position)){
+            //System.out.println("gleich");
+            String entsprechender_bin = Tabelle[1][j];
+            //System.out.println(entsprechender_bin);
+            text_bin = text_bin.concat(entsprechender_bin);
+            
+            break;
+        }
+            
+        }
+    }
+         return text_bin;
+    }
+    /*
+    static String bin_to_text(String text_bin,  String Tabelle [][]){
+        String text_n;
+        for (int i = 0; i < text_bin; i++) {
+            text_bin.
+        }
+        Tabelle[][];
+        return text_n;
+    }*/
+    
 }
 // Frage: Eine Q muss doch eigentlich nicht returnt werden da es sihc nicht um einen Primitieven Datentyp 
 //handelt somit ist die in einer Methode vorgeneommene Ferenderung auch in Anderen Methonden pasiert, oder ? 
-
 
