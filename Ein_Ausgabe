@@ -16,7 +16,7 @@ public class Ein_Ausgabe {
     String text = JOptionPane.showInputDialog("Enter your text");
     int[][] myNumbers = new int [text.length()][text.length()];
     text = text.toLowerCase();
-    System.out.println(text);
+    System.out.println("Orginal Text:"+text);
     
     text_letter_num_cout(text, myNumbers);// Statistik array[0=buchstabe ; 1= anzahl,][für alle vorkomenden Buchstaben]
     
@@ -51,7 +51,9 @@ public class Ein_Ausgabe {
         
         Tabelle[0][element] = akt.Buchstabe_String ;
         Tabelle[1][element] = akt.getBin() ;
-        
+        //gibt die codierung wieder
+        //System.out.println(Tabelle[0][element]);
+        //System.out.println(Tabelle[1][element]);
         element++;      
 
        }
@@ -60,8 +62,21 @@ public class Ein_Ausgabe {
     
     // Buchstabe in Binercode
     String text_to_bin = text_to_bin(text, Tabelle );
-    System.out.println(text_to_bin);
-    //String bin_to_text = bin_to_text(text_to_bin,Tabelle);
+    System.out.println("Bin: "+text_to_bin);
+    String bin_to_text = bin_to_text(text_to_bin,Tabelle,element);
+    
+    System.out.println("Zurückgewandelt : "+bin_to_text);
+    
+   for (int i = 0; i < text.length(); i++) {//
+            if (bin_to_text.charAt(i)==text.charAt(i)){
+        
+        
+            }
+            else{ 
+                System.out.println(":(");
+            }
+        }
+    
     
     
     
@@ -215,17 +230,27 @@ public class Ein_Ausgabe {
     }
          return text_bin;
     }
-    /*
-    static String bin_to_text(String text_bin,  String Tabelle [][]){
-        String text_n;
-        for (int i = 0; i < text_bin; i++) {
-            text_bin.
+    
+    static String bin_to_text(String text_bin,  String Tabelle [][], int ele){
+        
+        String text_n="";
+        String helper="";
+        for (int i = 0; i < text_bin.length(); i++) {
+            helper = helper+text_bin.charAt(i);
+           
+            for (int j = 0; j < ele; j++) {//Für alle in der Tabelle (wird geschaut ob es einen zugehöriegen buchstaben gibt)
+                String tab = Tabelle[1][j];
+                
+                if(tab.equals(helper)){
+                    text_n = text_n + Tabelle[0][j];
+                    helper ="";
+                    break;
+                }
+            }
+                    
         }
-        Tabelle[][];
+        
         return text_n;
-    }*/
+    }
     
 }
-// Frage: Eine Q muss doch eigentlich nicht returnt werden da es sihc nicht um einen Primitieven Datentyp 
-//handelt somit ist die in einer Methode vorgeneommene Ferenderung auch in Anderen Methonden pasiert, oder ? 
-
