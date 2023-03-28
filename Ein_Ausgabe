@@ -1,67 +1,94 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author tjorven
- */
 import javax.swing.JOptionPane;
 
 public class Ein_Ausgabe {
    
     public static void main(String[] args) {
     
-    
     int leter_count =0;
-    int moeglichkeiten =33;
-    String bytcode;
+    
+    
+    
+    
     String text = JOptionPane.showInputDialog("Enter your text");
-    int[][] myNumbers = new int [moeglichkeiten][text.length()];
-    text.toLowerCase();
-    for(int i =0; i<moeglichkeiten; i++){  
+    int[][] myNumbers = new int [text.length()][text.length()];
+    text = text.toLowerCase();
+    
+    
+    
+    
+    for(int i =0; i<text.length(); i++){  // Fült mit 0
             myNumbers[0][i]=0;
             myNumbers[1][i]=0;
     }
-    for (int j =0; j <text.length();j++){
+    
+    
+    for (int j =0; j <text.length();j++){//  Für jeden Buchstaben im Text
        char helper =  text.charAt(j);
-       int ascii = (int) helper ;
-       for(int i=0; i < moeglichkeiten ;i++){
-           if (myNumbers[0][i]==0){
+       int ascii = (int) helper ; // Ascii wert 
+       for(int i=0; i < text.length() ;i++){ // Wird geschaut ob 
+           if (myNumbers[0][i]== 0){ // die nächste zelle frei ist 
                myNumbers[0][i]= ascii;
                myNumbers[1][i]= 1;
                leter_count ++;
                break;
            }
-           else if (myNumbers[0][i] == ascii){
-               myNumbers[1][i]= myNumbers[1][i] + 1;
+           else if (myNumbers[0][i] == ascii){// oder ob es den selben buchstaben schon gibt
+               myNumbers[1][i]= myNumbers[1][i] + 1;// erhöt die anzahl des Buchstaben
                break;
-           }
+           }// Geht zur nächsten Zelle
        }
     }
-    quicksort(myNumbers,0,myNumbers.length);
     
     
-    Q<Buchstabe> q = new Q<Buchstabe>();
     
+    Q<Buchstabe> q = new Q<Buchstabe>(); 
     
-    for (int i = 0; i < myNumbers.length; i++) {
-        char Buchstabe = (char) myNumbers[0][i];
-        String Buchstabe_S = Buchstabe+"";
-            q.enqueue  ( new Buchstabe(myNumbers[0][i], Buchstabe_S,myNumbers[1][i]));
+    int isLehr = 0;
+    while (myNumbers[0][isLehr] !=0 || myNumbers[1][isLehr] !=0) {//Nur wenn es inhalt hat 
+        char Buchstabe = (char) myNumbers[0][isLehr];
+        String Buchstabe_S = Buchstabe+"";// Ascii wird in String umgewandelt 
+            q.enqueue  ( new Buchstabe(myNumbers[0][isLehr], Buchstabe_S,myNumbers[1][isLehr]));//fügt alle element als Buchstabe in Q hinzu
+            //                          Ascci               Char        Anzahl
+    isLehr++;
     }
-    Protukol(q);
-    // hier liegt glaube ich der Fehler... Kann null sein liegt an dem Return satment aus der Methode 
+    Q<Buchstabe> h = new Q<Buchstabe>(); 
     
-   
+    Buchstabe Wurzel = Protukol(q);// Baut den" Baum"
+                                    // erstellt neuen Buchtsaben aus den Zwei kleinsten Buchstaben
+                                     // Anzahl 1+2 ; zeiger auf die vorgenger
+                                     // Wiederholt bis es nur einen Buchstaben gibt
+    
+    String[][] Tabelle = new String [2][isLehr+1];
+    
+    Q<Buchstabe> list = new Q<Buchstabe>();
+    
+    auslesen(Wurzel,  list);// Es wird geschaut ob es ein Knoten oder Blat ist
+                            // Wenn knoten dann fügen Bin Links 0 und Rechts 1 hinzu
+                            // Wenn blat return Buchstabe hat volständige Bin folge 
+                            // Buchstabe wird Bin Folge in Q getan 
+    
+    int element =0;//
+    Buchstabe akt;
+    
+    while(!list.isEmpty()){//Wird in Array übertragen
+        
+        
+        akt = list.front();
+        list.dequeue();
+        
+              Tabelle[0][element] = akt.Buchstabe_String ; 
+              Tabelle[1][element] = akt.getBin() ; 
+        element++;      
+
+       }
     
     
     
-    for(int i =0 ; i <myNumbers.length ; i++){
+    
+    for(int i =0 ; i <Tabelle.length ; i++){// Gibt wieder Buchstaben und entsprächendem Weg im BinBaum
            
-        System.out.println((char)myNumbers[0][i]);
-        System.out.println(myNumbers[1][i]);
+        System.out.println(Tabelle[0][i]);
+        System.out.println(Tabelle[1][i]);
        }
     
     
@@ -77,68 +104,46 @@ public class Ein_Ausgabe {
     
     }
     static Buchstabe Protukol (Q q){
-        Buchstabe eins =finde_kleine(q);
-        Buchstabe zwei =finde_kleine(q);
-        int number;
-        String name;
-        name = eins.Buchstabe_String + zwei.Buchstabe_String;
-        number = eins.Anzahl + zwei.Anzahl;
+        Buchstabe eins = finde_kleine(q);
+        //System.out.println(eins.Anzahl+" "+eins.Buchstabe_String);
         
-        Buchstabe zusammengefast = new Buchstabe(0,name,number);
-        
-        //zusammengefast.isLeft;
-        //zusammengefast.isRight;
-        
-        q.enqueue(zusammengefast);
-        
-        
+        Buchstabe zwei = finde_kleine(q);
+        //System.out.println(zwei.Anzahl+" "+zwei.Buchstabe_String);
+        int number = eins.Anzahl + zwei.Anzahl;
+        String name = eins.Buchstabe_String+" "+zwei.Buchstabe_String;
+        Buchstabe zusammengefast = new Buchstabe(0,name,number);// Ist Knoten also Ascci 0
+        zusammengefast.setLinksBuchstabe(eins);//
+        zusammengefast.setRechtsBuchstabe(zwei);//Zeiger auf vorgänger
+        //System.out.println(zusammengefast.Anzahl+" "+zusammengefast.Buchstabe_String);
+        //System.out.println(zusammengefast.getLinksBuchstabe().Buchstabe_String+" "+zusammengefast.getRechtsBuchstabe().Buchstabe_String);
+        //System.out.println(zusammengefast.getLinksBuchstabe().Anzahl+" "+zusammengefast.getRechtsBuchstabe().Anzahl);
         
         
-    Buchstabe helper;
-    helper = (Buchstabe) q.front();
-    q.dequeue();   
-    if(q.isEmpty())  {
-        return helper;
+        q.enqueue(zusammengefast);// Wird wieder hinzugefügt 
+        
+        
+        
+        
+    Buchstabe helping = (Buchstabe) q.front();
+    q.dequeue();   // Ein element wirt entnommen
+    if(q.isEmpty())  {// Ist es jetzt leer, hatte es nur noch 1 element 
+        //System.out.println("Fertig");
+        return helping;// Gitb die Wurzel zurück
     }
     else{
-        q.enqueue(helper);
-          Protukol(q);// Wiederholt solange es mindestends zwei element in der q gibt 
-        return null;
+        //System.out.println("Wiederhollw");
+        
+        q.enqueue(helping);//Wird wieder hinzugefügt
+        // Wiederholt solange es mindestends zwei element in der q gibt 
+        return Protukol(q) ;// wie kann ich das umgehen
+        
         
         // ist das notwendig ??
         
        
     }
     }
-    static void quicksort(int[][] array, int low, int up) {
-    if (low >= up) {
-      return;
-    }
-    int pivot = array[1][up];
-    int links = low ;
-    int rechts = up;
-     while (links < rechts) {  // bis sie sich treffen 
-      while (array[1][links] <= pivot && links < rechts) {
-        links++;// Geht einen Schrit nach Rechts 
-      }
-      while (array[1][rechts] >= pivot && links < rechts) {
-        rechts--;// Geht einen schrit nach nach Links
-      }
-      swap(array, links, rechts);// Wenn ein kleineres rechts und ein größeres links sind werden sie Getauscht 
-     }
-    swap(array, links,up );
-    quicksort(array, low, links - 1); // Neu sortieren kleiner Pivot
-    quicksort(array, links + 1,up );// Neu sortieren größer Pivot 
-  }
     
-    static void swap(int[][] array, int pos1, int pos2) { // Tauschen zweier Elemente einer Arrays 
-        int helper = array[1][pos1];
-        array[1][pos1] = array[1][pos2];
-        array[1][pos2] = helper;
-        helper = array[0][pos1];
-        array[0][pos1] = array[0][pos2];
-        array[0][pos2] = helper;
-    }
     static Buchstabe finde_kleine(Q q){// Enfehrnt das kleinste element aus der q und returnt es
         Q<Buchstabe> zwei = new Q<Buchstabe>();
         
@@ -161,10 +166,38 @@ public class Ein_Ausgabe {
          while (!zwei.isEmpty()){
          q.enqueue(zwei.front());
          zwei.dequeue();
-         }
+        }
         
         
         return klienstes;
     }
     
+
+    static void auslesen(Buchstabe w,Q list){
+    if (w.Buchstabe_Ascii == 0){// Null wenn es ein Knoten Punkt ist wird 0 gesetzt beim erstellen eines Buchstabens als zusammengefasst
+        //System.out.println("Ist Knote");
+        //System.out.println(w.Buchstabe_String);
+        //System.out.println(w.getBin());
+        Buchstabe links = w.getLinksBuchstabe();
+        //System.out.println("geht L");
+        Buchstabe rechts =  w.getRechtsBuchstabe();
+        //System.out.println("geht R");
+        links.setBin(w.getBin()+"0");
+        rechts.setBin(w.getBin()+"1");
+        auslesen(links,  list);
+        auslesen(rechts,  list);
+    }
+        else{
+        //System.out.println("Blat");
+        System.out.println(w.Buchstabe_String+" "+w.getBin());
+        list.enqueue(w);
+        return;
+
+
+    }
+    }   
 }
+// Frage: Eine Q muss doch eigentlich nicht returnt werden da es sihc nicht um einen Primitieven Datentyp 
+//handelt somit ist die in einer Methode vorgeneommene Ferenderung auch in Anderen Methonden pasiert, oder ? 
+
+
